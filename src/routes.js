@@ -2,6 +2,13 @@ const express = require('express');
 const router = express.Router();
 const myDatabase = require('./connectToDatabase');
 
+/**
+ * Get all users.
+ * @route GET /api/user
+ * @group User - Operations related to users, in this case GET.
+ * @returns {Array<object>} 200 - A successfull response returning an array with all users from the table 'user'.
+ * @returns {Error} 500 - Internal server error when fetching the data fails.
+*/
 router.get("/users", (req, res) =>{
     const userQuery = 'SELECT * FROM users';
 
@@ -17,6 +24,15 @@ router.get("/users", (req, res) =>{
     })
 })
 
+/**
+ * Get a user by their ID.
+ * @route GET /api/user/{user_id}
+ * @group User - Operations related to users, in this case GET by user_id.
+ * @param {number} user_id.path.required - The ID of the user you want to get.
+ * @returns {object} 200 - A successfull response returning an array with the selected user from the table 'user'.
+ * @returns {Error} 404 - When the user_id your trying to get isn't found.
+ * @returns {Error} 500 - Internal server error when fetching the data fails.
+*/
 router.get('/users/:user_id', (req, res) => {
     const userId = req.params.user_id;
     const userQuery = 'SELECT * FROM users WHERE user_id = ?';
@@ -37,6 +53,17 @@ router.get('/users/:user_id', (req, res) => {
     });
 });
 
+/**
+ * Add a new user.
+ * @route POST /api/user
+ * @group User - Operations related to users, in this case POST.
+ * @param {string} user_name.body.required - The name of the user.
+ * @param {string} user_school.body.required - The school of the user.
+ * @param {string} user_expertLab.body.required - The path in expert lab that the user chose.
+ * @returns {object} 201 - The newly created user object.
+ * @returns {Error} 400 - Bad request. Invalid input.
+ * @returns {Error} 500 - Internal server error.
+*/
 router.post("/users", (req, res) => {
     const { user_name, user_email, user_interest } = req.body;
 
@@ -52,6 +79,19 @@ router.post("/users", (req, res) => {
     })
 })
 
+/**
+ * Update an existing user.
+ * @route PUT /api/user/{user_id}
+ * @group User - Operations related to users, in this case PUT.
+ * @param {number} user_id.path.required - The ID of the user.
+ * @param {string} user_name.body - The updated name of the user.
+ * @param {string} user_school.body - The updated school of the user.
+ * @param {string} user_expertLab.body - The updated expert lab path of the user.
+ * @returns {object} 200 - The updated user object.
+ * @returns {Error} 400 - Bad request. Invalid input.
+ * @returns {Error} 404 - When the user_id your trying to update isn't found.
+ * @returns {Error} 500 - Internal server error.
+*/
 router.put("/users/:user_id", (req, res) => {
     const userId = req.params.user_id;
     const { user_name, user_email, user_interest } = req.body;
@@ -72,6 +112,15 @@ router.put("/users/:user_id", (req, res) => {
     })
 })
 
+/**
+ * Delete a user.
+ * @route DELETE /api/user/{user_id}
+ * @group User - Operations related to users, in this case DELETE.
+ * @param {number} user_id.path.required - The ID of the user.
+ * @returns {object} 200 - The deleted user object.
+ * @returns {Error} 404 - When the user_id your trying to delete isn't found.
+ * @returns {Error} 500 - Internal server error.
+*/
 router.delete("/users/:user_id", (req, res) => {
     const userId = req.params.user_id;
 
@@ -91,4 +140,9 @@ router.delete("/users/:user_id", (req, res) => {
     })
 })
 
+/**
+ * Express router object for user-related routes.
+ * @type {express.Router}
+ * @module router
+*/
 module.exports = router;

@@ -7,6 +7,12 @@ const routes = require('./routes');
 
 app.use(bodyparser.json());
 
+/**
+ * Root route that returns a greeting message.
+ * @route GET /
+ * @group Root - Basic operations
+ * @returns {object} 200 - A greeting message for testing purpose.
+*/
 app.get("/", (request, response) => {
     response.send({message: "hello world"})
 })

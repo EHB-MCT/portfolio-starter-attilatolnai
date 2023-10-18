@@ -2,43 +2,22 @@ const express = require("express");
 const app = express();
 const mysql = require('mysql');
 const bodyparser = require("body-parser");
-
-const db = mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'',
-    database:'wc1',
-});
-
-db.connect((err) => {
-    if(err){
-        console.error('Error connecting',err);
-    } else {
-        console.log('connected')
-    }
-});
+const myDatabase = require('./connectToDatabase');
+const routes = require('./routes');
 
 app.use(bodyparser.json());
 
-
-
+/**
+ * Root route that returns a greeting message.
+ * @route GET /
+ * @group Root - Basic operations
+ * @returns {object} 200 - A greeting message for testing purpose.
+*/
 app.get("/", (request, response) => {
     response.send({message: "hello world"})
 })
 
-app.get("/users", (req,res)=>{
-    const userQuery = 'SELECT * FROM users';
-
-    db.query(userQuery,(err,result)=>{
-        if(err){
-            console.error("Error fetching data", err);
-            return res.status(500).json({status:'error',message:'Internal Server Error'});
-        }
-        console.log("Data successfully fetched");
-        res.json({status:'success', data:result});
-        console.log({data:result});
-    })
-})
+app.use('/api', routes);
 
 app.listen(3000, (err) => {
     if(!err) {

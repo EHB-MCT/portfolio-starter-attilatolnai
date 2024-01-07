@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream:src/index.js
 const express = require("express");
 const app = express();
 const mysql = require('mysql');
@@ -20,8 +21,14 @@ app.get("/", (request, response) => {
 app.use('/api', routes);
 
 app.listen(3000, (err) => {
+=======
+const app = require("./app.js")
+const port = 3000;
+
+app.listen(port, (err) => {
+>>>>>>> Stashed changes:images/api/src/index.js
     if(!err) {
-        console.log("running on port " + 3000);
+        console.log("running on port " + port);
     }
     else {
         console.log(err);
